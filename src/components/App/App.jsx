@@ -1,32 +1,27 @@
-import { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
-import { fetchInfo } from "../../API/fetchimages";
-import Searchbar from "../Searchbar/Searchbar";
-import Button from "../Button/Button";
-import ImageGallery from "../ImageGallery/ImageGallery";
-import Modal from "../Modal/Modal";
-import Loader from "../Loader/Loader";
+import { fetchInfo } from '../../API/fetchImages';
+import Searchbar from '../Searchbar/Searchbar';
+import Button from '../Button/Button';
+import ImageGallery from '../ImageGallery/ImageGallery';
+import Modal from '../Modal/Modal';
+import Loader from '../Loader/Loader';
 
-import "react-toastify/dist/ReactToastify.css";
-import { AppContainer } from "./App.styled";
+import 'react-toastify/dist/ReactToastify.css';
+import { AppContainer } from './App.styled';
 
 export default function App() {
   const [images, setImages] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
   const [page, setPage] = useState(1);
   const [totalHits, setTotalHits] = useState(null);
-  const [reqStatus, setReqStatus] = useState("idle");
-  const [selectedImg, setSelectedImg] = useState("");
+  const [reqStatus, setReqStatus] = useState('idle');
+  const [selectedImg, setSelectedImg] = useState('');
 
-  window.scrollTo({
-    top: document.documentElement.scrollHeight,
-    behavior: "smooth",
-  });
-
-  const handleSearchbarSubmit = (value) => {
-    if (value.trim() === "") {
-      return toast("PlEASE ENTER YOUR QUERY");
+  const handleSearchbarSubmit = value => {
+    if (!value) {
+      return toast('PlEASE ENTER YOUR QUERY');
     }
 
     if (value === inputValue) {
@@ -39,19 +34,19 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (inputValue.trim() === "") {
+    if (!inputValue) {
       return;
     } else {
       (async function () {
         try {
-          setReqStatus("pending");
+          setReqStatus('pending');
           const { hits, totalHits } = await fetchInfo(inputValue, 1);
           toast(`We found ${totalHits} images`);
           setImages(hits);
           setTotalHits(totalHits);
-          setReqStatus("resolved");
+          setReqStatus('resolved');
         } catch (error) {
-          setReqStatus("rejected");
+          setReqStatus('rejected');
           console.error(error.message);
         }
       })();
@@ -62,21 +57,26 @@ export default function App() {
     if (page !== 1) {
       (async function () {
         try {
-          setReqStatus("pending");
+          setReqStatus('pending');
           const { hits } = await fetchInfo(inputValue, page);
-          setImages((prevHits) => [...prevHits, ...hits]);
-          setReqStatus("resolved");
+          setImages(prevHits => [...prevHits, ...hits]);
+          setReqStatus('resolved');
+
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
         } catch (error) {
-          setReqStatus("rejected");
+          setReqStatus('rejected');
           console.error(error.message);
         }
       })();
     }
   }, [inputValue, page]);
 
-  const onLoadmoreButtonClick = (e) => {
-    if (e.currentTarget === e.target) {
-      setPage((prevPage) => prevPage + 1);
+  const onLoadmoreButtonClick = ({ currentTarget, target }) => {
+    if (currentTarget === target) {
+      setPage(prevPage => prevPage + 1);
     }
   };
 
@@ -84,8 +84,8 @@ export default function App() {
     setSelectedImg(!selectedImg);
   };
 
-  const onSelectedImg = (selectedImage) => {
-    setSelectedImg(selectedImage);
+  const onSelectedImg = selectedImg => {
+    setSelectedImg(selectedImg);
   };
 
   const showBtnLoadMore = images.length >= 12 && images.length < totalHits;
@@ -94,7 +94,7 @@ export default function App() {
     <AppContainer>
       <Searchbar onSubmit={handleSearchbarSubmit} />
       <ToastContainer role="alert" autoClose={2000} />
-      {reqStatus === "pending" && <Loader />}
+      {reqStatus === 'pending' && <Loader />}
       <ImageGallery data={images} onSelect={onSelectedImg} />
       {showBtnLoadMore && <Button onClick={onLoadmoreButtonClick} />}
       {selectedImg && (
