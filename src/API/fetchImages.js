@@ -9,7 +9,7 @@ axios.defaults.params = {
 };
 
 export const fetchInfo = async (q, page) => {
-  const response = await axios.get('', { params: { page, q } });
+  const { data } = await axios.get('', { params: { page, q } });
 
-  return response.data;
+  return data;
 };

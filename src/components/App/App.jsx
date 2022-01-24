@@ -34,47 +34,45 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (!inputValue) {
-      return;
-    } else {
-      (async function () {
-        try {
-          setReqStatus('pending');
-          const { hits, totalHits } = await fetchInfo(inputValue, 1);
-          toast(`We found ${totalHits} images`);
-          setImages(hits);
-          setTotalHits(totalHits);
-          setReqStatus('resolved');
-        } catch (error) {
-          setReqStatus('rejected');
-          console.error(error.message);
-        }
-      })();
-    }
+    if (!inputValue) return;
+
+    (async function () {
+      try {
+        setReqStatus('pending');
+        const { hits, totalHits } = await fetchInfo(inputValue, 1);
+        toast(`We found ${totalHits} images`);
+        setImages(hits);
+        setTotalHits(totalHits);
+        setReqStatus('resolved');
+      } catch (error) {
+        setReqStatus('rejected');
+        console.error(error.message);
+      }
+    })();
   }, [inputValue]);
 
   useEffect(() => {
-    if (page !== 1) {
-      (async function () {
-        try {
-          setReqStatus('pending');
-          const { hits } = await fetchInfo(inputValue, page);
-          setImages(prevHits => [...prevHits, ...hits]);
-          setReqStatus('resolved');
+    if (page === 1) return;
 
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth',
-          });
-        } catch (error) {
-          setReqStatus('rejected');
-          console.error(error.message);
-        }
-      })();
-    }
+    (async function () {
+      try {
+        setReqStatus('pending');
+        const { hits } = await fetchInfo(inputValue, page);
+        setImages(prevHits => [...prevHits, ...hits]);
+        setReqStatus('resolved');
+
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
+      } catch (error) {
+        setReqStatus('rejected');
+        console.error(error.message);
+      }
+    })();
   }, [inputValue, page]);
 
-  const onLoadmoreButtonClick = ({ currentTarget, target }) => {
+  const onLoadMoreButtonClick = ({ currentTarget, target }) => {
     if (currentTarget === target) {
       setPage(prevPage => prevPage + 1);
     }
@@ -96,10 +94,10 @@ export default function App() {
       <ToastContainer role="alert" autoClose={2000} />
       {reqStatus === 'pending' && <Loader />}
       <ImageGallery data={images} onSelect={onSelectedImg} />
-      {showBtnLoadMore && <Button onClick={onLoadmoreButtonClick} />}
+      {showBtnLoadMore && <Button onClick={onLoadMoreButtonClick} />}
       {selectedImg && (
         <Modal onClose={toggleModal}>
-          <img src={selectedImg.toString()} alt="" />
+          <img src={selectedImg.toString()} alt="Chosen item is absent" />
         </Modal>
       )}
     </AppContainer>
