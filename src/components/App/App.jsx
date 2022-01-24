@@ -18,7 +18,7 @@ export default function App() {
   const [totalHits, setTotalHits] = useState(null);
   const [reqStatus, setReqStatus] = useState('idle');
   const [selectedImg, setSelectedImg] = useState('');
-  const [tags, setSelectedImgTags] = useState('');
+  const [selectedImgTags, setSelectedImgTags] = useState('');
 
   const handleSearchbarSubmit = value => {
     if (!value) {
@@ -99,7 +99,7 @@ export default function App() {
       {showBtnLoadMore && <Button onClick={onLoadMoreButtonClick} />}
       {selectedImg && (
         <Modal onClose={toggleModal}>
-          <img src={selectedImg.toString()} alt={tags} />
+          <img src={selectedImg.toString()} alt={selectedImgTags} />
         </Modal>
       )}
     </AppContainer>
