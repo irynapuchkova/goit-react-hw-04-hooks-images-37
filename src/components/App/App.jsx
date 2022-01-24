@@ -18,6 +18,7 @@ export default function App() {
   const [totalHits, setTotalHits] = useState(null);
   const [reqStatus, setReqStatus] = useState('idle');
   const [selectedImg, setSelectedImg] = useState('');
+  const [tags, setSelectedImgTags] = useState('');
 
   const handleSearchbarSubmit = value => {
     if (!value) {
@@ -82,8 +83,9 @@ export default function App() {
     setSelectedImg(!selectedImg);
   };
 
-  const onSelectedImg = selectedImg => {
+  const onSelectedImg = (selectedImg, tags) => {
     setSelectedImg(selectedImg);
+    setSelectedImgTags(tags);
   };
 
   const showBtnLoadMore = images.length >= 12 && images.length < totalHits;
@@ -97,7 +99,7 @@ export default function App() {
       {showBtnLoadMore && <Button onClick={onLoadMoreButtonClick} />}
       {selectedImg && (
         <Modal onClose={toggleModal}>
-          <img src={selectedImg.toString()} alt="Chosen item is absent" />
+          <img src={selectedImg.toString()} alt={tags} />
         </Modal>
       )}
     </AppContainer>

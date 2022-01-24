@@ -10,8 +10,8 @@ export default function ImageGallery({ data, onSelect }) {
         <ImageGalleryItem
           key={id}
           src={webformatURL || largeImageURL}
-          tags={tags}
-          onClick={() => onSelect(largeImageURL)}
+          alt={tags}
+          onClick={() => onSelect(largeImageURL, tags)}
         />
       ))}
     </ImageGalleryUl>
@@ -27,4 +27,5 @@ ImageGallery.propTypes = {
       tags: PropTypes.string.isRequired,
     }),
   ),
+  onSelect: PropTypes.func,
 };

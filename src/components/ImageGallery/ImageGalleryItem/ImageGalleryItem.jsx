@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import { GalleryItem, Image } from "./ImageGalleryItem.styled";
+import { GalleryItem, Image } from './ImageGalleryItem.styled';
 
 export default function ImageGalleryItem({ src, tags, onClick }) {
   return (
@@ -13,4 +13,5 @@ export default function ImageGalleryItem({ src, tags, onClick }) {
 ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
   onClick: PropTypes.func,
+  tags: PropTypes.string.isRequired,
 };
